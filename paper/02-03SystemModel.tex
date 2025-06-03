@@ -1,0 +1,202 @@
+\section{System Model and linear relaxation}
+\label{sec:model}
+\subsection{System Model}
+We consider an infinite horizon discrete time restless Markovian bandit problem parameterized by the tuple $\langle \sspace, \Pmat{0}, \Pmat{1}, \Rvec{0}, \Rvec{1}; \alpha, N \rangle$.  A decision maker is facing $N$ statistically identical arms, and each arm has a state that belongs to the finite state-space $\sspace$. At each time-instant, the decision maker observes the states of all arms $\bs=\{s_1\dots s_N\}$ and chooses a vector of actions $\ba=\{a_1\dots a_N\}$, where the action $a_n=1$ (respectively $a_n=0$) corresponds to pulling the arm $n$ (or leaving it). The decision maker is constrained to pull at most $\alpha N$ arms at each decision epoch. 
+
+The matrices $\Pmat{0}$ and $\Pmat{1}$ denote the transitions matrices of each arm and the vectors $\Rvec{0}, \Rvec{1}$ denote the $|\sspace|$ dimensional vector for the rewards. We assume that all the rewards $\Rvec{}$ lie between $0$ and $1$. As the state-space is finite, this assumption can be made without loss of generality by scaling and centering the reward vector. 
+We assume that the transitions of all arms are Markovian and independent. This means that if the arms are in state $\bs := \{s_1, s_2 \dots s_N\}\in\sspace^N$ and the decision maker takes an action $\ba\in\{0,1\}^N$, then the decision maker earns a reward $\frac{1}{N}\sum_{n} r^{a_n}_{s_n}$ and the next state becomes $\bs':= \{s'_1, s'_2 \dots s'_N\}\in\sspace^N$ with probability
+\begin{equation}\label{EQ:MKEVOL}
+    \begin{split}
+            &\ProbP(\bS(t + 1) = \bs'|\bS(t) = \bs,\bA(t) = \ba, \dots \bS(0), \bA(0)) \\
+            &\qquad= \ProbP(\bS(t + 1) = \bs'|\bS(t) = \bs,\bA(t) = \ba)
+            = \Pi_{n = 1}^{N} P^{a_n}_{s_n, s_n'}.
+    \end{split}
+\end{equation}
+%Where $P^{a_n}_{s_n', s_n}$ denotes the $(s'_n, s_n)$ entry of the corresponding transition matrix $\Pmat{a_n}$. 
+It is important to note that the arms are only coupled through the budget constraint $\alpha$.
+
+Let $\pi$ be a stationary policy mapping each state to a probability of choosing actions, i.e, $\pi : \sspace^{N} \to \Delta (\{0, 1\}^{N})$ subject to the budget constraint $\alpha$. Let $\pspace$ denote the space of all such policies. We define the average gain of policy $\pi\in\pspace$ as
+\begin{equation}\label{EQ::VPOLT}
+    \Vpol{N} = \lim_{\THor \to \infty}\frac{1}{\THor}\E_{\pi}\left[ \sum_{t = 0}^{\THor - 1} \frac{1}{N} \sum_{n = 1}^N r^{A_n(t)}_{S_n(t)}\right].
+\end{equation}
+In theory, the average gain of a policy might depend on the initial state $\bS^{(N)}(0)$. Yet, under mild conditions (which will be verified in our case), this value does not depend on the initial state. This is why we omit the dependence on the initial state and simply write $\Vpol{N}$.
+ 
+Here $(S_n(t), A_n(t))$ denotes the state-action pair of the $n$th arm at time $t$ and $r^{A_n(t)}_{S_n(t)}$ denotes the $S_n(t)^{\text{th}}$ entry of the $\Rvec{A_n(t)}$ vector. As the state-space and action space is finite, for any stationary policy $\pi$, the limit is well defined, \cite{puterman2014markov}. The RMAB problem amounts to computing a policy $\pi$ that maximizes the infinite average reward. We denote the optimal value of the problem as
+\begin{align}\label{EQ::VOPTT}
+    \Vopt{N} &:= \max_{\pi \in \pspace} \Vpol{N}.%  \nonumber\\
+    %\text{s.t.} \hspace{0.25 in} &\sum_{s} \YN{t}{s}{1} = \alpha \label{EQ:VOPT2}\\
+%    \text{follows}&\text{ the Markovian evolution \eqref{EQ:MKEVOL}}
+\end{align}
+%As the states and actions are finite, such an optimal policy exists that achieves . 
+The optimal policy exists and the limit is well defined, \citet{puterman2014markov}. 
+
+\subsection{Alternative state representation via empirical distribution}
+
+In order to build an approximation of \eqref{EQ::VOPTT}, we introduce an alternative representation of the state space, that we will use extensively in the paper. Given any joint state of the arms $\bs\in\sspace^{N}$, we denote the empirical distribution of these arms as $\mB(\bs)\in\Delta_S$, where $\Dels$ is the simplex of dimension $|\sspace|$. $\mB(\bs)$ is a vector with $|\sspace|$ dimensions and $x_i(\bs)$ is the fraction of arms that are in state $i$.  Next, given an action vector $\ba$, we denote by $\bu(\bs, \ba)$ the empirical distribution of the state-action pairs ($s,1$). In words, $u_i(\bs,\ba)$ is the fraction of arms that are in state $i$ and that are pulled.  Since no more than $N\alpha$ arms can be pulled at any time instance and no more than $Nx_i(\bs)$ arms can be pulled in state $i$, it follows that when $\mB$ is fixed, $\bu$ satisfies the following inequalities,
+    \begin{equation}\label{EQ::POL}
+    0 \leq \bu \leq \mB \hspace{0.3 in} \|\bu\|_1 \leq \alpha \|\mB\|_1 = \alpha,
+\end{equation}
+where $\bu\leq\mB$ denotes a component-wise inequality and $\|\cdot \|_1$ denotes the $l_1$ norm. We denote by $\mcl{U}(\mB)$ the set of feasible actions for a given $\mB$, \emph{i.e.}, the set of $\bu$ that satisfy \eqref{EQ::POL}.
+
+\subsection{Linear relaxation}
+
+We consider the following linear program:
+\begin{subequations}
+    \label{EQ::VOPTDYN-Tinf}
+    \begin{align}
+       \Vopt{\infty} := \max_{\bx,\bu\in\Delta_{\sspace}}&~ \Rvec{0}\cdot \mB + (\Rvec{1} - \Rvec{0})\cdot\bu,\label{EQ:VOPTDYN-inf1}\\
+        \text{Subject to: }\quad
+        &\bu \in \mcl{U}(\mB) \label{EQ::MF3-inf}\\
+        &\mB = \mB  \Pmat{0} +  \bu (\Pmat{1} - \Pmat{0}) \label{EQ::MF2-inf}
+    %\max_{\pi \in \pspacedyn}\Vpol{\infty}{\mB}
+    \end{align}
+\end{subequations}
+This linear program is known to be a relaxation of \eqref{EQ::VOPTT} that is asymptotically tight, that is $\Vopt{N}\le \Vopt{\infty}$ for all $N$ and $\lim_{N\to\infty}\Vopt{N}=\Vopt{\infty}$, see \citet{GGY23b,HXCW24}.%note this comes from theorem 2.1 in Chen's paper, the idea is to look at gain at the fixed point which allows for dealing with a policy without worrying about constraint violations
+
+To give some intuition on the relationship between \eqref{EQ::VOPTT} and \eqref{EQ::VOPTDYN-Tinf}, we remark that if $\bX{t} := \mB(\bS^{N}(t))$ is the empirical distribution of states at time $t$ and $\bU(t)=\bu(\bS(t),\bA(t))$ is the joint control, then it is shown in \citet{GGY23b} that the Markovian evolution \eqref{EQ:MKEVOL} implies
+\begin{equation}
+\E[\bX{t + 1} \mid \bX{t}, \bU(t)] = \mX{(t)}  \Pmat{0} +  \bU(t)(\Pmat{1} - \Pmat{0}).
+\label{EQ:evolution_mf}
+% + \mM(\mX{(t)}, \bU(t))
+\end{equation}
+In \eqref{EQ::VOPTDYN-Tinf}, the variable $x_i$ corresponds to the time-averaged fraction of arms in state $i$; similarly the variable $u_i$ corresponds to the time-averaged fraction of arms in state $i$ that are pulled. The constraint \eqref{EQ::MF3-inf} imposes that \emph{on average}, no more than $\alpha N$ arms are pulled. This is in contrast with the condition imposed for problem \eqref{EQ::VOPTT} that enforces this condition at each time step. 
+
+%\redtext{\emph{Further, we will assume that each arm is unichain}.}
+%. Here $R(\bS, \bA)$ is the sum of rewards accumulated by our $N$ arms under joint state $\bS$ and action $\bA$. 
+%Let $\YN{t}{s}{a}$ denote the fraction of arms in state $s$, playing action $a$ at time $t$. Let $\Rvec{} = [\Rvec{0}, \Rvec{1}]$ be the concatenation of the reward vectors under action $0$ and $1$ respectively. We may then formulate the average reward accrued by the arm as follows:
+
+%Note, our problem does not attempt to relax the constraint by resorting to an average time constraint i.e, we do not replace \eqref{EQ:VOPT2} by,
+%\begin{equation*}
+%    \frac{1}{T}\sum_{s} \YN{t}{s}{1} = \alpha
+%\end{equation*}
+%Such a relaxation is often referred to as \redtext{Whittle's relaxation, [Consta, Borkar's papers].} \emph{Can we still come up with a tractable policy that solves this problem while maintaining the anytime constraint on the problem?}
+
+%\emph{Our work answers this question in the affirmative.}
+
+% \subsection{Problem Statement}
+% With the pieces in place we now state the problem as follows:
+% \begin{center}
+%     \emph{Using a minimal set of assumptions can we come up with a tractable solution to the problem \eqref{EQ::VOPTDYN}?
+%     Can one use this to construct a control for \ref{EQ::VOPTT} whose performance can be guaranteed?}
+% \end{center}
+% \textbf{Through this paper, we answer both these questions in the affirmative.}
+
+
+
+\section{Construction of the LP-update policy}
+\label{sec:algo}
+
+\subsection{The Finite-Horizon Mean Field Control Problem}
+%As stated in the introduction, this problem is P-SPACE hard, we will instead look for asymptotically optimal algorithms that converge to the optimal algorithm as $N$ tends to infinity. 
+%We have a finite set of states $\sspace \triangleq \{1, 2 \dots d\}$. 
+% Given any joint state of the arms $\bs\in\sspace^{N}$, we denotes the empirical distribution of these arms as $\mB(\bs)\in\Delta_S$, where $\Dels$ is the simplex of dimension $|\sspace|$. $\mB(\bs)$ is a vector with $|\sspace|$ dimensions and $x_i(\bs)$ is the fraction of arms that are in state $i$.  Next, given an action vector $\ba$, we denote by $\bu(\bs, \ba)$ the empirical distribution of the state-action pairs ($s,1$). In words, $u_i(\bs,\ba)$ is the fraction of arms that are in state $i$ and that are pulled.  Since no more than $N\alpha$ arms can be pulled at any time instance and no more than $N\mB_{s}$ arms can be pulled in state $s$, it follows that when $\mB$ is fixed, $\bu$ satisfies the following inequalities,
+%     \begin{equation}\label{EQ::POL}
+%     \bu \leq \mB \hspace{0.3 in} \|\bu\|_1 \leq \alpha \|\mB\|_1 = \alpha 
+% \end{equation}
+%  Here $\leq$ denotes a component-wise inequality and $\|\cdot \|_1$ denotes the $l_1$ norm. We denote by $\mcl{U}(\mB)$ the set of feasible actions for a given $\bx$, \emph{i.e.}, the set of $\bu$ that satisfy \eqref{EQ::POL}.
+
+%  If $\bX{t} := \mB(\bS^{N}(t))$ denotes the empirical distribution of the states at time $t$ and $\bU(t):\bu(\bS(t),\bA(t))$ denote the joint control, then it is is shown in \citet{GGY23b} that the Markovian evolution \eqref{EQ:MKEVOL} implies
+%  \begin{equation}
+%      \E[\bX{t + 1} \mid \bX{t}, \bA(t)] = \Pmat{0} \mX{(t)} + (\Pmat{1} - \Pmat{0}) \bU(t).% + \mM(\mX{(t)}, \bU(t))
+%  \end{equation}
+ 
+% where $\mM(\cdot, \cdot)$ is a Markovian random vector with the following properties,
+% \[
+% \E[\mM(\mX{}, \bU)|\mX{}, \bU] = 0, \hspace{0.3 in} \E[\|\mM(\mX{}, \bU)\|_1|\mX{},\bU]\leq \frac{|\sspace|}{\sqrt{N}}
+% \]
+
+%\redtext{!!TODO: introduce the multiplier!!}\bluetext{Do we need to do it here? It is only required for the proof.}\redtext{I believe we do if we want to consider the improved update (the second theorem)}
+
+To build the LP-update policy, we consider a \emph{controlled dynamical system}, also called the \emph{mean field model}, that is a finite-time equivalent of \eqref{EQ::VOPTDYN-Tinf}. For a given initial condition $\bx(0)$ and a time-horizon $\tau$, the states and actions of this dynamical system are constrained by the evolution equations 
+\begin{subequations}
+    \label{EQ:MeanField}
+    \begin{align}
+        %\mB(0) &= \mB(\bS^{N}(0)) \label{EQ::MF1}\\
+        \bu(t) &\in \mcl{U}(\bx(t))  \label{EQ::MF3} \\
+        \bx({t + 1}) &= \bx(t) \Pmat{0}  + \bu(t) (\Pmat{1} - \Pmat{0}) , \label{EQ::MF2}
+    \end{align}
+\end{subequations}
+$\forall t\in\{0\dots \tau-1\}$. In the above equation, \eqref{EQ::MF2} should be compared with  \eqref{EQ:evolution_mf} and indicates that $\bx(t)$ and $\bu(t)$ correspond to the quantities $\E[\bX{t}]$ and $\E[\bU(t)]$ of the original stochastic system. As the constraint \eqref{EQ::MF3} must be ensured by $\bx(t)$ and $\bu(t)$, this constraint \eqref{EQ::POL} must be satisfied for the expectations: $\E[\bU(t)]\in\mcl{U}(\E[\bX{t}])$.
+
+The reward collected at time $t$ for this dynamical system is $\Rvec{0}\cdot \bx(t) + (\Rvec{1} - \Rvec{0})\cdot\bu(t)$. Let $\lambda$ be the dual multiplier of the constraint \eqref{EQ::MF2-inf} of an optimal solution of \eqref{EQ::VOPTDYN-Tinf}. We define a \emph{deterministic} finite-horizon optimal control problem as:
+%mapping an uncountable state space to an uncountable action space, $\pi : \Dels \to \mcl{U}$ is now expressed by:
+% \begin{align}\label{EQ::VPOLDYN}
+%     \Vpol{\infty}{\mB} =& \lim_{\THor \to \infty}\frac{1}{\THor}\sum_{t = 0}^{\THor - 1} \left( \Rvec{0}\cdot \mB(t) + (\Rvec{1} - \Rvec{0})\cdot\bu(t)\right),\\
+%     \text{Subject to} & \text{ the dynamics \ref{EQ:MeanField}.}
+% \end{align}
+% Concretely, we will denote the set of all feasible policies that satisfy \ref{EQ:MeanField} by $\pspacedyn$. The corresponding \emph{deterministic optimal control problem} can be stated as follows:
+\begin{subequations}
+    \label{EQ::VOPTDYN}
+    \begin{align}
+       \VoptInf{\tau}{\mB(0)} &= \max_{\bx, \bu} \sum_{t = 0}^{\tau - 1} \left( \Rvec{0}\cdot \mB(t) + (\Rvec{1} - \Rvec{0})\cdot\bu(t)\right) + \lambda \cdot\bx(\tau),\label{EQ:VOPTDYN1}\\
+         &\text{Subject to:} \text{ $\bx$  and $\bu$ satisfy \eqref{EQ:MeanField} for all $t\in\{0,\tau-1\}$,}
+    %\max_{\pi \in \pspacedyn}\Vpol{\infty}{\mB}
+    \end{align}
+\end{subequations} 
+Before moving forward, the equation above deserves some remarks. First, for any finite $\tau$, the objective and the constraints \eqref{EQ:MeanField} for the optimization problem \eqref{EQ::VOPTDYN} are linear in the variables $(\bx(t),\bu(t))$. This means that this optimization problem is computationally easy to solve. \textbf{In what follows, we denote by $\LPpol{\tau}{\mB}$ the value of $\bu(0)$ of an optimal solution to \eqref{EQ::VOPTDYN}.}
+
+Second, the definition of \eqref{EQ::VOPTDYN} imposes that the constraint $\|\bu\|_1 \leq \alpha \|\mB\|_1 = \alpha $ holds for each time $t$. This is in contrast to the way this constraint is typically treated in RMAB problems, in which case \eqref{EQ::POL} is replaced with the time-averaged constraint $\frac{1}{T}\sum_{t = 0}^{T - 1}\|\bu(t)\|_1 \leq \alpha$. The latter relaxation was introduced in \cite{Wh88} and is often referred to as Whittle's relaxation \citep{Avrachenkov2020WhittleIB,Avrachenkov2021}. This is the constraint that we use to write  \eqref{EQ::VOPTDYN-Tinf}.  \cite{GGY23} showed that for any finite $T$, the finite-horizon equivalent of \eqref{EQ::VOPTT} converges to \eqref{EQ::VOPTDYN} as $N$ goes to infinity. The purpose of this paper is to show that the solution of the finite $T-$horizon LP \eqref{EQ::VOPTDYN} provides an almost-optimal solution to the original $N-$arm average reward problem \eqref{EQ::VOPTT}. 
+
+Last, as we will discuss later, taking $\lambda$ as the dual multiplier of the constraint \eqref{EQ::MF2-inf} helps to make a connection between the finite and the infinite-horizon problems \eqref{EQ::VOPTDYN} and \eqref{EQ::VOPTDYN-Tinf}. Our proofs will hold with minor modification by replacing $\lambda$ by $0$ and in practice we do not use this multiplier at all.
+
+\subsection{The Model Predictive Control Algorithm}
+\begin{algorithm}[ht]
+	\caption{Evaluation of the LP-Update policy}
+	\label{algo::MPC}
+	\begin{algorithmic}
+            \REQUIRE Horizon $\tau$, Initial state $\bS^{(N)}(0)$, model parameters $\langle \Pmat{0}, \Pmat{1}, \Rvec{0}, \Rvec{1} \rangle$, and time horizon $T$
+            \STATE Total-reward $\leftarrow 0$.
+            \FOR{$t=0$ to $T-1$}
+            \STATE $\bu(t) \leftarrow \LPpol{\tau}{\mB(\bS^{(N)}(t))}$.
+            \STATE $\bA^{(N)}(t)$ $\leftarrow$ Randomized Rounding $(\bu(t))$ %(relegated to supplementary material)
+            (by using Algorithm~\ref{algo::rounding}).
+            \STATE Total-reward $\leftarrow$ Total-reward + $R(\bS^{(N)}(t), \bA^{(N)}(t))$.
+            \STATE Simulate the transitions according to \eqref{EQ:MKEVOL} to get $\bS^{(N)}(t + 1)$            \ENDFOR
+            \ENSURE{$\text{Average reward}: \frac{\text{Total-reward}}{\THor} \approx \Vlp{\tau}{N}$}
+	\end{algorithmic}
+\end{algorithm}
+
+The pseudo-code of the LP-update policy is presented in Algorithm \ref{algo::MPC}. The LP-update policy takes as an input a time-horizon $\tau$. At each time-slot, the policy solves the finite horizon linear program \eqref{EQ::VOPTDYN} to obtain $\LPpol{\tau}{\mB}$ that is the value of $\bu(0)$ for an optimal solution to \eqref{EQ::VOPTDYN}. Note that such a policy may not immediately translate to an applicable policy as we do not require that $N\LPpol{\tau}{\mB}$ be integers. We therefore use \emph{randomized rounding} to obtain a feasible policy for our $N$ armed problem, $\bA^{N}(t)$. Applying these actions to each arm gives an instantaneous reward and a next state. This form of control has been referred to as \emph{rolling horizon} \citet{puterman2014markov} but is more commonly referred to as \emph{model predictive control} \citet{DTGLS14}. Our algorithm may be summarized by:
+\begin{equation}\label{EQ::ALGO}
+    \bS^{(N)}(t) \xrightarrow[]{\text{Solve LP \eqref{EQ::VOPTDYN}}}\LPpol{\tau}{\mB(\bS^{(N)}(t))} \xrightarrow[\text{rounding}]{\text{Randomized}} \bA^{N}(t) \xrightarrow[\text{new state}]{\text{Observe}} \bS^{(N)}(t + 1). 
+\end{equation}
+We use a randomized rounding procedure similar to \cite{GGY23}, %check the supplementary material for details.
+see Appendix~\ref{apx:rounding}. 
+
+%see for example \citep{Avrachenkov2020WhittleIB,Avrachenkov2021}.
+%i.e,    For any feasible action $\bA^{(N)} := \{ a_1, a_2 \dots a_N\}$ for state $\bS^{(N)}$, the action $\bu := \bu(\bA^{(N)},\bS^{(N)})$ lies in $\mcl{U}(\mB(\bS^{(N)})$. Therefore, any stationary policy $\pi \in \pspace$ automatically lies in $\pspacedyn$. Hence, $\pspace \subset \pspacedyn$. 
+
+
+%This dynamical system constrains our choice of control $\{\y{s}{a}{t}\}$. Hence, given a state $\mB$ we use $\mcl{C}(\mB)$ to denote the set of valid controls for state $\mB$ and $\cspace{\mB}$ the space of controls for our infinite horizon problem. 
+
+%Next, we can define two separate but related long term rewards for this deterministic system, the average time and discounted reward problems. Let $\y{s}{a}{t}$ be our control, constrained by the dynamics \eqref{EQ:DYN} then define the following infinite horizon average reward problem with initial state distribution, $\mB(0)$:
+
+%\begin{align}\label{EQ:LPAVG}
+    %\Vdetavg{\mB(0)} \triangleq \max_{\textbf{y} \in \cspace{\mB}} \lim_{T \uparrow \infty}\frac{1}{T}\sum_{t = 0}^{T} \sum_{s,a} \y{s}{a}{t}\rew{s}{a} 
+%\end{align}
+
+%A corresponding infinite horizon discounted problem with discount factor $\beta < 1$ can similarly be written down as follows:
+
+%\begin{align}\label{EQ:LPDISC}
+    %\Vdetdisc{\mB(0)} \triangleq \max_{\textbf{y} \in \cspace{\mB}} \lim_{T \uparrow \infty}\sum_{t = 0}^{T} \beta^{t}\sum_{s,a} \y{s}{a}{t}\rew{s}{a} 
+%\end{align}
+
+%Where, $\textbf{y} := \{\y{s}{a}{t}\}_{(s,a,t)}$ is the infinite horizon control under the dynamic systems constraint \eqref{EQ:DYN1} - \eqref{EQ:DYN3}. 
+
+%A few concrete remarks on the mathematical structure of our problem are in order,
+
+%\begin{remark}\label{REM::1}
+    %Let $\Delss := \Dels \times \Dels$ denote the space of controls at each time $t \in \{0, 1, \dots\}$. The product topology on $\Pi_{t = 0}^{\infty}\Delss$ is the topology of point-wise convergence on the infinite horizon control problems \eqref{EQ:LPAVG} and \eqref{EQ:LPDISC}. Under the topology of point-wise convergence, the domain of $\textbf{y}$ is compact. Hence, the maximum in both $\Vdetavg{\mB(0)}, \Vdetdisc{\mB(0)}$ are well defined and there exists for each of the maximization problems at least one control, $\textbf{y}_{\text{avg}}, \textbf{y}_{\text{$\beta$}}$ respectively that maximizes the infinite horizon reward.
+
+    %\redtext{This is not quite right, we need to write this a little more carefully so that it takes care of the constraint set which is well defined given an initial condition and control policy.}
+    
+    %Further, note for any $\mB(0)$ in $\Dels$, 
+    %\[
+    %\Vdetavg{\mB(0)} = \Vopt{\infty}{N}
+    %\]
+    %This is independent of the initial condition. 
+%\end{remark}
+
+%\subsection*{An equivalent LP problem}
+%Before we proceed further, we pause to draw the readers attention to an equivalent finite horizon LP problem. This interpretation of the problem will be particularly useful when we state our algorithm in the next section. Let $\y{s}{a}{t}$ denote the fraction of arms in state $s$, with action $a$ at time $t$. We denote by $\ybt{t}$ the vector in $\Delss$ corresponding to this empirical distribution. It is straight-forward to check that the two systems are equivalent, $\ybt{t} := [\yb^{0}(t) \yb^{1}({t})]$ and $\yb^{0}({t}) = \mB(t) - \bu(t)$ and $\yb^{1}({t}) = \bu(t)$. Continuing further, let $\Pnext := [\Pmat{0} \Pmat{1}]$ and $\Rvec{} := [\Rvec{0} \Rvec{1}]$ be concatenations of the components under passive and active actions respectively. For a time horizon $T$, we can re-frame \eqref{EQ::VOPTDYN} in terms of a dynamic program as: 
+

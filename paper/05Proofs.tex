@@ -1,0 +1,138 @@
+
+\section{Proofs: Main Ideas}
+\label{sec:proof}
+In this section, we provide the major ingredients of the proofs of the two main theorems. We provide more details for the proof of Theorem~\ref{thm:asymptotic_optimal} because this is the more original of the two. The proofs of all lemmas and some details of computation are deferred %to Appendix ~\ref{apx:PFcomp}.
+to the supplementary material.
+
+%In this section, we provide the major ingredients of the proofs of the two main theorems. We provide more details for the proof of Theorem~\ref{thm:asymptotic_optimal} because this is the most original of the two. %The proofs of all lemmas and some details of computation are deferred to Appendix ~\ref{apx:proof_thm1_details}. 
+
+\subsection{Sketch for Theorem \ref{thm:asymptotic_optimal}:}
+
+Three major components are required in order to complete the proof. 
+
+\paragraph{Part 1, Properties of the dynamical control problem \eqref{EQ::VOPTDYN}:} For $\bx,\bu$, we denote by $\Phi(\bx, \bu) := \bx\Pmat{0} + \bu (\Pmat{1} - \Pmat{0})$ the deterministic transition kernel, and we recall that the instantaneous reward is $R(\bx, \bu) := \Rvec{0}\cdot \bx + (\Rvec{1} - \Rvec{0})$. In Lemma~\ref{LEM::EXGH},
+%the supplementary material,
+we establish several properties that relate the finite-horizon problem \eqref{EQ::VOPTDYN} and the finite-horizon problem \eqref{EQ::VOPTDYN-Tinf} that hold under Assumption~\ref{AS::SA}. First, we show that the average gain of the finite-time horizon problem \eqref{EQ::VOPTDYN} converges to the average gain of the infinite-horizon problem, that is $\lim_{\tau\to\infty} W_\tau(\bx)/\tau = g^*$ for all $\bx$. Second, we also show that the \emph{bias function} $h^{\star}(\cdot) : \Dels \to \R$ given by :
+\begin{equation}\label{EQ::Defbias}
+    h^{\star}(\bx) := \lim_{\tau \to \infty} \VoptInf{\tau}{\bx} - \tau g^{\star}
+\end{equation} 
+is well defined and Lipschitz-continuous with constant $k/\syncconst_k$ and the convergence in \eqref{EQ::Defbias} is uniform in $\bx$. Moreover, the gain and the bias function satisfy  
+\begin{equation}\label{EQ::FIXEDPT}
+    h^{\star}(\bx) + g^{\star} = \max_{\bu \in \mcl{U}(\bx)} R(\bx, \bu) + h^{\star}(\Phi(\mB, \bu)).
+\end{equation} 
+While both these definitions are well known in the average reward \emph{unichain MDP}, \emph{single arm} setting \emph{without constraints}, %Lemma~\ref{LEM::EXGH} establishes
+we establish these definitions for the \emph{constrained, deterministic problem}. Note the difference in the second term on the right hand side of the fixed point equation: typically the right hand side in the single arm problem takes the form $R(s, a) + \sum_{s'}P(s'|s, a) h(s')$, whereas here the expectation is inside rather than outside! %This is primarily because we no longer have a bias vector but rather a general bias function.
+
+% We use these results in Proposition \ref{PROP::FINHOR} to show, there exist states $\mB_1$ and $\mB_2$ such that the following result holds for \eqref{EQ::VOPTDYN} :
+% \begin{equation}\label{EQ::FINITHOR}
+%     \tau g^{\star} + h^{\star}(\mB) - h^{\star}(\mB_1) \geq \VoptInf{\tau}{\mB} \geq \tau g^{\star} + h^{\star}(\mB) - h^{\star}(\mB_2).
+% \end{equation}
+% This is a precise finite horizon characterization of \eqref{EQ::VOPTDYN}. %The main purpose of these results is to establish a precise characterization of the problem \ref{EQ::VOPTDYN} in the \emph{finite time regime}. 
+%These definitions satisfy the following fixed point equation 
+%\begin{equation}
+%    h^{\star}(\bx) + g^{\star} = \max_{\bu \in \mcl{U}(\bx)} R(\bx, \bu) + %h^{\star}(\Phi(\mB, \bu))
+%\end{equation} 
+%Note, this fixed point equation is well established in the average reward setting for \emph{unichain MDPs without constraints}, we establish analogous results for the \emph{constrained, deterministic problem \ref{EQ::VOPTDYN} under assumption \ref{AS::SA}}. Now, we can use the result above to 
+
+\paragraph{Part 2, \emph{Dissipativity} and \emph{rotated cost}}
+Let $(\bx^*, \bu^*)$ be the\footnote{For clarity we will present the proof as if  this point is unique although the proof also holds without this requirement.} optimal solution of the infinite-horizon problem \eqref{EQ::VOPTDYN-Tinf}, and let $l(\mB, \bu) := g^{\star} - \Rvec{0}\cdot \mB - (\Rvec{1} - \Rvec{0})\cdot\bu$. Following \cite{DTGLS14}, an optimal control problem with stage cost $l(\bx, \bu)$ and dynamic $\bx(t + 1) := \Phi(\bx, \bu)$ is called \emph{dissipative} if there exists a \emph{storage function} $\lambda : \Dels \to \R$ that satisfies the following equation:
+\[
+    \rotcost{l}{\bx}{\bu} := l(\mB, \bu) + \lambda(\mB) - \lambda(\Phi(\mB, \bu)) \geq l(\bx^*, \bu^*) = \rotcost{l}{\bx^*}{\bu^*} = 0.
+\]
+The cost, $\rotcost{l}{\mB}{\bu}$ is called the \emph{rotated cost function}.
+
+In Lemma~\ref{LEM::DISS}, we show
+%The appendix (in supplementary material) shows
+that our problem is dissipative by setting the storage function $\lambda(x) := \lambda \cdot x $, where $\lambda$ is the optimal dual multiplier of the constraint \eqref{EQ:VOPTDYN1}. It is important to note, the rotated cost so defined is always non-negative.
+
+\paragraph{Part 3, MPC is optimal for the deterministic control problem} By using our definition of rotated cost, we define the following minimization problem
+\begin{align}
+    \Costmin{\tau}{\mB} &:= \min\sum_{t = 0}^{\tau - 1}\rotcost{l}{\mB(t)}{\bu(t)}.\nonumber\\
+    &\text{Subject to:} \text{ $\bx(t)$  and $\bu(t)$ satisfy \eqref{EQ:MeanField} for all $t\in\{0,\tau-1\}$.}
+    \label{EQ::COSTMINPROB}
+\end{align}
+By dissipativity, $L_\tau(\bx)$ is monotone increasing. Moreover, we have that $\Costmin{\tau}{\mB} \geq 0 = \Costmin{\tau}{\bx^*}$. Hence, the problem is \emph{operated optimally at the fixed point}, $(x^*, u^*)$. The optimal operation at a fixed point is a key observation, made by several works, \citep{Avrachenkov2024, GGY23b, yan2024, HXCW23}, we recover this result as a natural consequence of dissipativity.
+By Lemma~\ref{lem:C_vs_W},
+%One can establish (indeed we do this in the supplementary material)
+$\Costmin{\tau}{\mB}= \tau g^{\star} - \VoptInf{\tau}{\bx} + \lambda \cdot \bx$ because\footnote{In fact, the two control problems are equivalent: $\bu^*$ is optimal for \eqref{EQ::VOPTDYN} if and only if it is for \eqref{EQ::COSTMINPROB}. } of a telescopic sum of the terms $\lambda \cdot \bx(t)$.  Combining this with \eqref{EQ::Defbias} implies that $\lim_{\tau\to\infty}\Costmin{\tau}{\bx} = h^{\star}(\bx) + \lambda \cdot \bx $. \red{We will denote this limit by $\Costmin{\infty}{\bx}$.} %Now consider the quantity $\Costmin{\infty}{\bx}$,
+%\begin{align*}
+ %  \infty > \Costmin{\infty}{\bx} =  \Costmin{0}{\bx} + \sum_{t = 1}^{\infty}\left(\Costmin{t}{\bx} %- \Costmin{t - 1}{\bx}\right)
+%\end{align*}
+As $L_\tau(\bx)$ is monotone, it follows that, for any $\epsilon > 0$, there exists a $\tau(\epsilon)$ such that %for $\Costmin{\tau(\epsilon)}{\bx} - \Costmin{\tau(\epsilon) - 1}{\bx} < \epsilon$ and
+\redtext{$|\Costmin{\infty}{\bx} - \Costmin{\tau(\epsilon)}{\bx}| < \epsilon$}. Note, the monotonicity of $L_\tau(\bx)$ is crucial to obtain this property, leading us to use dissipativity. Putting the components together, we can now prove the final steps.
+%\subsubsection*{Proving the main statement of the theorem:}
+
+\paragraph{Proof of Theorem~\ref{thm:asymptotic_optimal}}
+
+%\begin{proof}[Proof of Theorem~\ref{thm:asymptotic_optimal}]
+ We begin by considering the difference between the optimal value and the model predictive value function. We let $\bX{t}$ denote the empirical distribution of the arms at time $t$ and $\bU(t)$ be the corresponding empirical distribution of the actions. We drop the superscript $N$ for convenience in the proof below, but it should be noted that $\bU(t)$ is always obtained from a randomized rounding procedure and hence, is dependent on $N$. 
+\begin{align}
+\Vopt{N} - \Vlp{\tau}{N} %\leq g^{\star} -\Vlpt{\mB}{\tau}{N} \label{EQ:EQV1}\\
+&\le \lim_{T\to\infty}\frac{1}{T}\sum_{t = 0}^{T-1} \E \left[g^{\star} - R(\mX(t), \mU(t)) \right]\nonumber\\%\label{EQ:EQV2}\\
+&= \lim_{T\to\infty}\frac{1}{T}\sum_{t = 0}^{T-1} \E \left[g^{\star} - \Rvec{0}\cdot \mX(t) - (\Rvec{1} - \Rvec{0})\cdot\bu(t) +  (\Rvec{1} - \Rvec{0}) \cdot \left(\bu(t) - \bU(t)\right)\right]\nonumber\\
+& \le \lim_{T \to \infty} \frac{1}{T}\sum_{t = 0}^{T-1} \E \left[l(\mX(t), \bu(t)) \right] + \frac{\alpha N - \lfloor{\alpha N}\rfloor}{N}\label{EQ:EQV3}
+\end{align}
+The first inequality follows from the well known result $\Vopt{N} \leq g^{\star}$, \citep{yan2024, GGY23, HXCW23}. The last inequality follows from randomized rounding %(see supplementary material)%
+and Lemma \ref{apx::lem_round}.
+Let $(A):=\lim_{T\to\infty} \frac{1}{T}\sum_{t = 0}^{T-1} \E \left[l(\mX(t), \bu(t)) \right]$ denote the first term of \eqref{EQ:EQV3}. Adding and subtracting the storage cost we have:
+\begin{align*}
+    &(A)  = \lim_{T\to\infty} \frac{1}{T}\sum_{t = 0}^{T-1} \E \left[\rotcost{l}{\mX(t)}{\bu(t)} - \lambda\cdot\mX(t) + \lambda\cdot\Phi(\mX(t), \bu(t)) \right].
+\end{align*}
+Now note, by the dynamic programming principle $\rotcost{l}{\bx}{\bu} = \Costmin{\tau}{\bx} - \Costmin{\tau - 1}{\Phi(\bx, \bu)}$. \red{Further, for any state $\bx$ and its corresponding control $\bu$ consider: $$\Costmin{\tau}{\bx} - \Costmin{\tau - 1}{\Phi(\bx, \bu)} = \Costmin{\tau}{\bx} - \Costmin{\infty}{\Phi(\bx, \bu)} + \Costmin{\infty}{\Phi(\bx, \bu)} - \Costmin{\tau - 1}{\Phi(\bx, \bu)}.$$
+By choosing $\tau = \tau(\epsilon)$ we have, $\max \{|\Costmin{\tau - 1}{\bx} - \Costmin{\infty}{\bx}|, |\Costmin{\tau}{\bx} - \Costmin{\infty}{\bx}|\} < \epsilon$.}
+%\red{THERE IS A BETTER WAY TO WRITE THiS DOWN, I AM MAKING THE $\tau$ UNNECESSARILY COMPLICATED. I"LL REWRITE IT IN THE SAME FORMAT BUT BETTER.}
+%\begin{align}
+    %\label{EQ:EQV3-4}
+    %\Costmin{\tau}{\bx} - \Costmin{\tau - 1}{\Phi(\bx, \bu)} \leq \Costmin{\tau}{\bx} - \Costmin{\tau}{\Phi(\bx, \bu)} + \epsilon    
+%\end{align}
+Plugging these inequalities together, introducing a telescopic sum, and manipulating the order of variables slightly (shown in Appendix %C.4, supplementary material) the term $(A)$ is smaller than
+~\ref{apx:proof_thm1_details}), the term $(A)$ is smaller than
+\begin{align}
+    \label{EQ:EQV4}
+    2\epsilon + \lim_{T\to\infty}  \frac{1}{T}\sum_{t = 0}^{T - 1} \E \left[\Costmin{\infty}{\mX(t + 1)} - \Costmin{\infty}{\Phi(\mX(t), \bu(t))} - \lambda\cdot [\mX(t {+} 1) {-} \Phi(\mX(t), \bu(t))] \right].%\\
+    %&  %+ \frac{\Costmin{\tau}{\mX(0)} - \Costmin{\tau}{\mX(\tau)} - \lambda \cdot \mX(0) + \lambda \cdot \mX(\tau)}{\tau} 
+    %+ \frac{\alpha N - \lfloor{\alpha N}\rfloor}{N} + \epsilon
+\end{align}
+By Lemma~1 of \cite{GGY23b}, we have $\|\E [\mX(t {+} 1)| \mX(t), \bU(t)] - \Phi(\mX(t), \bU(t))\|_1 \le \sqrt{|S|}/\sqrt{N}$. Moreover, our rounding procedure implies that $\|\Phi(\mX(t), \bU(t))-\Phi(\mX(t), \bu(t))\|_1\le C_\Phi(\alpha N - \lfloor\alpha N\rfloor)/N$ where $C_\Phi\le2$ is the Lipschitz-constant of the map $\Phi$ %The reader can check the supplementary material for the intermediate steps.
+(see \ref{apx:C5}). With a few extra steps (see \ref{apx:C5})we get:% Plugging this into \eqref{EQ:EQV4} shows that
+\begin{align}
+    \label{EQ:EQV4b}
+    (A) \le 2\epsilon + (C_{L} + \|\lambda\|_\infty) \left(\frac{\sqrt{|S|}}{\sqrt{N}} + 2\frac{\alpha N - \lfloor\alpha N\rfloor}{N} \right),
+\end{align}
+where $C_{L}$ is a Lipschitz constant for the limiting map $\Costmin{\infty}{\cdot}$ and $\|\lambda\|_\infty$ is the infinity-norm of the Lagrange multiplier $\lambda$. \red{In Appendix 
+%C.3 (supplementary material)
+Appendix \ref{apx:MPC}[Lemma \ref{lem:C_vs_W}],
+we show that $C_{L}$ is bounded above by $k/\rho_k + \|\lambda\|_\infty$, further, in %the supplementary material
+Appendix \ref{APX:LAGBOUND}
+we show that $\|\lambda\|_\infty\le (k/\rho_k)(1+\alpha k/\rho_k)$.}  The theorem follows by substituting these values into \eqref{EQ:EQV4b} and adding a term $(\alpha N - \lfloor{\alpha N}\rfloor)/N$ coming from \eqref{EQ:EQV3}. See Appendix %C.5 (supplementary material)
+~\ref{apx:C5}.
+
+%Plugging this into \eqref{EQ:EQV4} shows that
+%\begin{align*}
+%    (A) \le \epsilon + (\frac{k}{\rho_k}+\frac{k}{\rho_k}(1+\alpha \frac{k}{\rho_k}))\left(\frac{\sqrt{|S|}}{\sqrt{N}} + \frac{\alpha N - \lfloor\alpha N\rfloor}{N} \right).
+%\end{align*}
+
+%(in $\mB$ for any $\tau$. Since, $\E [\mX(t + 1)| \mX(t), \bU(t)] = \Phi(\mX(t), \bU(t))$, Lemma~1 of \cite{GGY23b} implies: %\redtext{I am a bit ensure about the $l1$ vs $l2$ norm: the result of \cite{GGY23b} implies that the $l1$ norm is smaller than $\sqrt{S/N}$. If we look at the proof, we obtain a $\sqrt{1/N}$ for the $l2$-norm. Are you really using the $l2$ norm here?} \bluetext{You are right, the Lipschitz constant is given by $l1$ norm in this case for $h^{\star}$, that is the norm we need to use for all the proof values.}
+%\begin{align*}
+  % &\|\E[\mX(t + 1)|\mX(t), \bU(t)] - \Phi(\mX(t), \bu(t)) \|_1 \\
+  % &\leq \|\E[\mX(t + 1)|\mX(t), \bU(t)] - \Phi(\mX(t), \bU(t)) \|_1 + \|\Phi(\mX(t), \bu(t)) - \Phi(\mX(t), \bU(t)) \|_1\\
+  % &\leq \frac{\sqrt{|\sspace|}}{\sqrt{N}} + \frac{C_{\Phi}(\alpha N - \lfloor{\alpha N}\rfloor)}{N},
+%\end{align*}
+% $$\|\E[\mX(t + 1)|\mX(t), \bU(t)] - \Phi(\mX(t), \bu(t)) \|_1 \leq \frac{\sqrt{|\sspace|}}{\sqrt{N}} + \frac{C_{\Phi}(\alpha N - \lfloor{\alpha N}\rfloor)}{N},$$
+% \bluetext{ where $C_{\Phi}$ is the Lipschitz constant of the map $\Phi$. Since we consider the difference of the state from the expected state in the $l1$ norm, our bound for $\lambda$ will be in the infinity norm, $\|\lambda\|_{\infty}$. Passing to the limit $T\to\infty$ we have:
+% \begin{equation}
+%    \Vopt{\mB}{N} - \Vlpt{\mB}{\tau}{N} \leq  \epsilon + \left(\frac{k}{\syncconst_{k}} + \|\lambda\|_{\infty}\right)\left(\frac{\sqrt{|\mcl{S}|}}{\sqrt{N}} + \frac{C_{\Phi}(\alpha N - \lfloor{\alpha N}\rfloor)}{N}\right) + \frac{(\alpha N - \lfloor{\alpha N}\rfloor)}{N}
+% \end{equation}
+% Now note that $C_{\Phi}$ is bounded above by $2$ since the entries of any stochastic matrix are bounded above by $1$ and the transition kernel comprises of the difference of the transition kernel under action $1$ and $0$ in the worst case. Next, in Appendix \ref{SEC:LAGBOUND}, we show that under appropriate parametrization, the lagrange multiplier $\|\lambda\|_{\infty}$ is bounded above by $\frac{k}{\syncconst_k}\left( 1 + \frac{\alpha k}{\syncconst_{k} }\right)$. Substituting these values into our equation gives us:
+% \begin{equation}
+%    \Vopt{\mB}{N} - \Vlpt{\mB}{\tau}{N} \leq  \epsilon + \frac{k}{\syncconst_{k}}\left(2 + \frac{\alpha k}{\syncconst_{k}} \right)\left(\frac{\sqrt{|\mcl{S}|}}{\sqrt{N}} + \frac{2(\alpha N - \lfloor{\alpha N}\rfloor)}{N}\right) + \frac{(\alpha N - \lfloor{\alpha N}\rfloor)}{N}
+% \end{equation}
+% }
+%\end{proof}
+
+\subsection{Theorem~\ref{thm:expo_bound}}
+
+The proof Theorem~\ref{thm:expo_bound} is more classical and follows the same line as the proof of the exponential asymptotic optimality of \cite{GGY23,HXCW24}. The first ingredient is Lemma~\ref{lem:locally_linear} that
+ shows that, by non-degeneracy, there exists a neighborhood of $\bx^*$ such that $\mu_\tau(\bx^*)$ is locally linear around $\bx^*$. The second ingredient is Lemma~\ref{lem:concentration}
+ that shows that $\bX{t}$ is concentrated around $\bx^*$ as $t\to\infty$, \emph{i.e.}, for all $\epsilon>0$, there exists $C>0$ such that $\lim_{t\to\infty} \Pr[\|\bX{t}-\bx^*\|\ge \varepsilon]\le e^{-C N}$. Combining the two points imply the result. For more details, see %supplementary material.
+ Appendix~\ref{apx:PFcomp_expo}.

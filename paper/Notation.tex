@@ -1,0 +1,236 @@
+\usepackage{xcolor}
+\usepackage{color}
+\usepackage{bm}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\makeatother
+\usepackage{graphicx} % Required for inserting images
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{comment}
+\usepackage{amsmath,amssymb}
+\usepackage{amsfonts} 
+\usepackage{bbm}
+\usepackage{mathtools}
+%\usepackage{amsthm}
+\usepackage{bbm}
+\usepackage{dsfont}
+\usepackage{xifthen}
+
+%\newtheorem{theorem}{Theorem}[section]
+%\newtheorem{proposition}{Proposition}[section]
+%\newtheorem{corollary}{Corollary}[theorem]
+%\newtheorem{lemma}[theorem]{Lemma}
+%\newtheorem{definition}{Definition}[section]
+\newtheorem{assumption}{Assumption}
+%\newtheorem{remark}{Remark}[section]
+
+\usepackage{xcolor}
+\usepackage{color}
+
+\makeatother
+%\newcommand{\redtext}[1]{{\leavevmode\color{red}#1}}
+\newcommand{\bluetext}[1]{{\leavevmode\color{blue}#1}}
+
+%Problem parameters
+\newcommand{\mcl}{\mathcal}
+\newcommand{\Pmat}[1]{\mathbf{P}^{#1}}
+\newcommand{\Pnext}{\mathbf{P}}
+
+
+%\newcommand{\Rvec}[1]{\mathbf{r}^{#1}}
+\newcommand{\Rvec}[1]{\mathbf{r}^{#1}}
+\newcommand{\sspace}{\mcl{S}}
+\newcommand{\cspace}[1]{\mcl{C}^{\infty}(#1)}
+\newcommand{\bS}{\textbf{S}}
+\newcommand{\bs}{\textbf{s}}
+\newcommand{\bA}{\textbf{A}}
+\newcommand{\ba}{\textbf{a}}
+\newcommand{\pspace}{\Pi^{(N)}}
+\newcommand{\pspacedyn}{\Bar{\Pi}}
+\newcommand{\rrel}[2]{r_{\text{rel}}(#1, #2)}
+\newcommand{\rlpup}[2]{r_{\text{LP-Up}}(#1, #2)}
+
+%LP priority symbols
+\newcommand{\Stateplus}{\mathcal{S}_{+}}
+\newcommand{\Statezero}{\{s_0\}}
+\newcommand{\Stateminus}{\mathcal{S}_{-}}
+\newcommand{\Statenull}{\mathcal{S}_{\emptyset}}
+%\newcommand{\Feas}{\mathcal{F}_{\text{priority}}}
+
+
+\newcommand{\YN}[3]{Y^{(N)}_{#2,#3}(#1)}
+
+\newcommand{\YNdisc}[3]{Y^{(N)}_{#2,#3}(#1, \beta)}
+\newcommand{\y}[2]{y_{#1, #2}}
+%\newcommand{\yrel}[2]{\y{#1}{#2}^{\text{rel}}}
+%\newcommand{\yrelb}[1]{\textbf{y}^{\text{rel}}_{#1}}
+\newcommand{\yb}{\textbf{y}}
+\newcommand{\ybt}[1]{\textbf{y}(#1)}
+\newcommand{\ybn}[1]{\textbf{y}_{#1}}
+\newcommand{\ydynb}[1]{\textbf{y}^{\text{dyn}}_{#1}}
+\newcommand{\ydisc}[2]{y_{#1, #2}(\beta)}
+\newcommand{\XN}[1]{X^{(N)}(#1)}
+\newcommand{\XNS}[2]{X^{(N)}_{#2}(#1)}
+
+\newcommand{\m}[1]{x_{#1}}
+\newcommand{\mB}{\textbf{x}}
+\newcommand{\mBt}[1]{\textbf{x}(#1)}
+%\newcommand{\mBu}{\mB^{\text{U}}}
+%\newcommand{\mBl}{\mB^{\text{L}}}
+%\newcommand{\mBrel}[1]{\mB^{\text{rel}}_{#1}}
+%\newcommand{\mBdyn}[1]{\mB^{\text{dyn}}_{#1}}
+
+\newcommand{\Dels}{\Delta_{\sspace}}
+\newcommand{\Delss}{\Delta_{2 \times \sspace}}
+
+\newcommand{\rew}[2]{r_{#1, #2}}
+\newcommand{\LPV}[3]{Y_{#2,#3}(#1)}
+\newcommand{\rmax}{r_{\text{max}}}
+
+%SA notations
+\newcommand{\ssync}{s_{\text{sync}}}
+\newcommand{\tsync}{t_{\text{sync}}}
+\newcommand{\syncconst}{\rho}
+\newcommand{\timesync}[1]{T_{\text{sync}}(#1)}
+\newcommand{\timesyncd}[2]{T_{\text{sync}}(#1, #2)}
+\newcommand{\DLT}[2]{\Bar{\delta}_{#1}(#2)}
+\newcommand{\THor}{T}
+
+%value function notation
+%\newcommand{\Vrel}[1]{V_{\text{rel}}(#1)}
+\newcommand{\Vlp}[2]{V_{\text{LP -}#1}^{(#2)}}
+\newcommand{\Vlpt}[3]{V_{\text{LP -} #2}^{(#3)}(#1)}
+%\newcommand{\Vlpup}[2]{V_{\text{LP-Up}}^{\beta}(#1, #2)}
+\newcommand{\VoptInf}[2]{W_{#1}{(#2)}}
+\newcommand{\Vopt}[1]{V_{\text{opt}}^{#1}}
+\newcommand{\Vpol}[1]{V_{\pi}^{(#1)}}
+%\newcommand{\Vopt}[2]{V_{\text{opt}}^{#2}\ifthenelse{\equal{#1}{}}{}{(#1)}}
+%\newcommand{\Vpol}[2]{V_{\pi}^{(#1)}(#2)}
+\newcommand{\Voptdisc}[3]{V_{\text{opt-disc}}^{(#3)}(#1, #2)}
+\newcommand{\Vdetdisc}[2]{
+    \ifthenelse{\isempty{#2}}{V^{\infty}_{\beta}(#1)}
+    {V^{\infty}_{#2}(#1)}
+}
+%\newcommand{\Vrelavg}[1]{V^{\text{rel}}_{\text{avg}}(#1)}
+\newcommand{\Vdetavg}[1]{V^{\text{det}}_{\text{avg}}(#1)}
+\newcommand{\VreldiscT}[2]{V_{\text{rel}}^{\beta}(#1, #2)}
+%\newcommand{\Vcopy}[3]{V_{\text{copy}}^{\beta}(#1, #2, #3)}
+\newcommand{\LPpol}[2]{\mu_{#1}(#2)}
+
+\newcommand{\Wopt}[2]{W_{\text{opt}}^{(#2)}(#1)}
+\newcommand{\Woptrot}[2]{\Tilde{W}_{\text{opt}}^{(#2)}(#1)}
+\newcommand{\Wlpt}[2]{\Tilde{W}_{\text{LP}, #2}(#1)}
+
+
+
+%some generic operator notation
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\ProbP}{\mathbb{P}}
+\newcommand{\constfun}[1]{#1\mathbbm{1}}
+\newcommand{\Real}{\mathbb{R}}
+\newcommand{\R}{\mathbb{R}}
+
+%Proof of convergence notation
+\newcommand{\vecs}[1]{\Vec{S}(#1)}
+\newcommand{\vecss}{\Vec{S}}
+\newcommand{\vecsn}{\Vec{S}_{\text{next}}}
+\newcommand{\svec}[3]{\{#3_{#1}, \dots, #3_{#2}\}}
+\newcommand{\snabv}[2]{s'^{#1:#2}}
+\newcommand{\DelsN}[1]{\Delta_{\sspace}^{(#1)}}
+\newcommand{\veca}[1]{\Vec{A}(#1)}
+\newcommand{\vecaa}{\Vec{A}}
+\newcommand{\DelaN}[1]{\Delta_{\mcl{A}}^{(#1)}}
+\newcommand{\Bellopa}[1]{\mathcal{L}^{#1}}
+\newcommand{\Bellop}{\mathcal{L}}
+\newcommand{\funup}[2]{f_{#1}^{\text{up}}(#2)}
+\newcommand{\fundn}[2]{f_{#1}^{\text{dn}}(#2)}
+\newcommand{\aopt}[1]{\textbf{a}_{#1}}
+
+\newcommand{\one}{\textbf{1}}
+%Turnpike notation
+\newcommand{\rotcost}[3]{\Tilde{#1}(#2, #3)}
+\newcommand{\stor}[1]{\lambda(#1)}
+\newcommand{\TPK}[1]{\vartheta^{1}_{#1}}
+\newcommand{\TPKK}[1]{\vartheta^{2}_{#1}}
+%\newcommand{\LPT}[2]{\mu^{\text{LP}}_{#1,#2}}
+\newcommand{\bx}{{\bm{x}}}
+\newcommand{\bhx}{\hat{\bm{x}}}
+\newcommand{\by}{{\bm{y}}}
+\newcommand{\bhy}{\hat{\bm{y}}}
+\newcommand{\br}{\bm{r}}
+\newcommand{\bu}{\bm{u}}
+\newcommand{\bU}{\bm{U}}
+\newcommand{\bv}{\bm{v}}
+\newcommand{\bV}{\bm{V}}
+\newcommand{\bz}{\bm{z}}
+\newcommand{\bZ}{\bm{Z}}
+\newcommand{\Costmin}[2]{L_{#1}(#2)}
+\newcommand{\bX}[1]{{\bm{X}(#1)}}
+
+\def\mA{{\bm{A}}}
+%\def\mB{{\bm{B}}}
+\def\mC{{\bm{C}}}
+\def\mD{{\bm{D}}}
+\def\mE{{\bm{E}}}
+\def\mF{{\bm{F}}}
+\def\mG{{\bm{G}}}
+\def\mH{{\bm{H}}}
+\def\mI{{\bm{I}}}
+\def\mJ{{\bm{J}}}
+\def\mK{{\bm{K}}}
+\def\mL{{\bm{L}}}
+\def\mM{{\bm{M}}}
+\def\mN{{\bm{N}}}
+\def\mO{{\bm{O}}}
+\def\mP{{\bm{P}}}
+\def\mQ{{\bm{Q}}}
+\def\mR{{\bm{R}}}
+\def\mS{{\bm{S}}}
+\def\mT{{\bm{T}}}
+\def\mU{{\bm{U}}}
+\def\mV{{\bm{V}}}
+\def\mW{{\bm{W}}}
+\def\mX{{\bm{X}}}
+\def\mY{{\bm{Y}}}
+\def\mZ{{\bm{Z}}}
+\def\mBeta{{\bm{\beta}}}
+\def\mPhi{{\bm{\Phi}}}
+\def\mLambda{{\bm{\Lambda}}}
+\def\mSigma{{\bm{\Sigma}}}
+
+
+%Dual notation
+\newcommand{\lagminf}{\mathbf{\mu_{\infty}}}
+\newcommand{\lagminfn}[1]{\mathbf{\mu_{\infty}}^{(#1)}}
+\newcommand{\laghomosub}{\mathbf{\nu_{\text{rel}}}}
+\newcommand{\lagmax}{\mathbf{\nu_{\text{max}}}}
+\newcommand{\biasvec}[1]{\mathbf{b}_{\text{rel}}(#1)}
+\newcommand{\biasgen}[2]{\mathbf{b}_{#2}(#1)}
+\newcommand{\gainrel}{\mathbf{g}_{\text{rel}}}
+\newcommand{\gaingen}[1]{\mathbf{g}_{#1 }}
+
+%Proof of main theorem notation
+%\newcommand{\sigdif}[3]{\sigma(#1, #2, #3)}
+%\newcommand{\sigmax}[2]{\sigma_{\text{max}}(#1, #2)}
+%\newcommand{\hamnorm}[1]{\|#1\|_{\text{ham}}}
+%\newcommand{\spnorm}[1]{\|#1\|^{\text{sp}}}
+%\newcommand{\spnormloc}[2]{\|#1\|^{\text{sp}}_{B(#2, 1/N)}}
+%\newcommand{\spnormsup}[1]{\|#1\|^{\text{sp}}_{\infty}}
+%\newcommand{\spnorms}[2]{{\text{sps}}\left( #1, #2 \right)}
+%\newcommand{\spnormst}[1]{{\text{sps}}\left( #1, \infty\right)}
+%\newcommand{\spnorma}[2]{{\text{spa}}\left( #1, #2\right)}
+%\newcommand{\spnormat}[1]{{\text{spa}}\left( #1, \infty\right)}
+
+%\newcommand{\compnorm}[1]{\|#1\|_{\text{cmp}}}
+
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\def\ceil#1{\lceil #1 \rceil}
+\def\floor#1{\lfloor #1 \rfloor}
+
+%common state smybols and constants
+%\newcommand{\MN}[2]{M^{(N)}_{#2}(#1)}
+%\newcommand{\MND}[1]{M^{(N)}(#1)}

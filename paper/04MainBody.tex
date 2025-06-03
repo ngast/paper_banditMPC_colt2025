@@ -1,0 +1,75 @@
+\section{Main theoretical results}
+\label{sec:main-theory}
+
+The main result of our paper is to show that a finite-horizon model predictive control algorithm, that we call the LP-update policy, is asymptotically optimal for the infinite horizon bandit problem. Note that this LP-update policy is introduced in \citet{GGY23,GGY23b,ghosh2022indexability} for finite-horizon restless bandit.
+
+
+
+\subsection{First result: LP-update is asymptotic optimal}
+
+Our result will show that the LP-update policy is asymptotically optimal as the number of arms $N$ goes to infinity, under an easily verifiable mixing assumption on the transition matrices. To express this condition, for a fixed integer and a sequence of actions $\ba=(a_1\dots a_k)\in\{0,1\}^k$, we denote by $P^{\ba}_{i, j}$ the $(i,j)$th entry of the matrix $\prod_{t=1}^k \Pmat{a_k}$. We then denote by $\rho_k$ the following quantity\footnote{The definition \eqref{eq:ergodic_coef} is related to the notion of ergodic coefficient defined in \citep{puterman2014markov} that used a related constant to prove convergence of value iteration algorithms in span norm for the unconstrained discounted Markov Decision Process.}: 
+\begin{align}
+    \label{eq:ergodic_coef}
+      \syncconst_{k} \triangleq \min_{s, s'\in\sspace, \ba\in\{0,1\}^k} \sum_{s^* \in \sspace}\min\{P^{a_1, a_2, \dots a_k}_{s, s^*}, P^{0, 0, \dots 0}_{s', s^*}\}    
+\end{align}
+In the above equation, the minimum is taken over all possible initial states $s,s'$ and all possible sequence of actions. The quantity $\syncconst_k$ can be viewed as the probability (under the best coupling) that two arms starting in states $s$ and $s'$ reach the same state after $k$ iterations, if the sequence $a_1\dots a_k$ is used for the first arm while the second arm only uses the action $0$.  The assumption that we use for our result is that $\syncconst_k>0$ for some integer $k$.
+\begin{assumption}\label{AS::SA}
+    There exists a finite $k$ such that $\syncconst_{k} > 0$.
+\end{assumption}
+While the assumption may look abstract, note that when the $\Pmat{0}$ matrix is ergodic, it ensures that assumption \ref{AS::SA} holds. Indeed in this case, there exists a $k>0$ such that $P^{0\dots 0}_{ij}>0$ for all $i,j$ which would imply that $\syncconst_{k} > 0$.  Related assumptions and their relationship to Ergodicity can be found in \citet{hernandez2012discrete}.  Assumption~\ref{AS::SA} is similar to the unichain and aperiodic condition imposed in \citet{hong2024unichain}.  Note that this quantity involves the best coupling and not a specific coupling; it is more general than the synchronization assumption from \citet{HXCW23}. \\
+We are now ready to state our first theorem, in which we provide a performance bound of the average reward of the LP-update policy, that we denote by $\Vlp{\tau}{N}$.
+
+\begin{theorem}
+\label{thm:asymptotic_optimal}
+    Assume \ref{AS::SA} with ergodicity constant $\syncconst_{k}$ for some fixed integer $k$. Fix a positive constant $\epsilon > 0$;  then there exists $\tau(\epsilon)$ such that, Algorithm~\ref{algo::MPC} has the following guarantee of performance:
+    \begin{equation}
+        \Vlp{\tau(\epsilon)}{N} \ge \Vopt{\infty} - 2\epsilon  - \left(\frac{2k}{\syncconst_k}\left[3 +  \frac{2k\alpha}{\syncconst_k}\right] + 1\right)\frac{\alpha N - \lfloor{\alpha N}\rfloor}{N} - \frac{k}{\syncconst_k}\left(3 +  \frac{2k\alpha}{\syncconst_k}\right)%\left(
+        \sqrt{\frac{|\mcl{S}|}{N}}%\right)
+    \end{equation}
+\end{theorem}
+%}
+As $\Vopt{N}\le \Vopt{\infty}$, this result shows that the LP-update policy becomes optimal as $\tau$ and $N$ go to infinity. The sub-optimality gap of LP-update decomposes in three terms. The first term corresponds to an upper-bound on the sub-optimality of using the finite-horizon $\tau$ when solving the LP-problem \eqref{EQ::VOPTDYN}. Our proof shows that one can take $\tau(\epsilon) = \mcl{O}(\frac{1}{\epsilon})$, and in the numerical section, we will show that choosing a small value like $\tau=10$ is sufficient for most problems. The second term corresponds to a rounding error: for all $\alpha$ such that $N\alpha $ is an integer, this term equals $0$.  The dominating error term is the last term, $O(1/\sqrt{N})$. It corresponds to the difference between the $N$-arm problem and the LP-problem with $\tau=+\infty$. 
+
+\subsection{Second result: Exponentially small gap under a stability condition}
+
+Theorem~\ref{thm:asymptotic_optimal} shows that the sub-optimality gap of the LP-update policy is of order $O(1/\sqrt{N})$ under quite general conditions. While one could not hope for a better convergence rate in general, there are known cases for which one can construct policies that become optimal exponentially fast when $N$ goes to infinity. This is the case for Whittle index under the conditions of indexability, uniform global attractor property (UGAP), non-degeneracy and global exponential stability \cite{GGY23}. More details can be found in Appendix \ref{apx:review}. %The restriction of indexability is removed in \cite{GGY23b} and the condition of UGAP is removed \cite{HXCW24}. The latter presents a hybrid policy that becomes optimal exponentially fast under the conditions of aperiodic unichain, non-degenerate and local stability.
+In this section, we show that LP-update also becomes optimal exponentially fast under essentially the same conditions as the ones presented in \cite{HXCW24}. The first condition that we impose is that the solution of the above LP-problem is non-degenerate (as defined in \citet{GGY23,HXCW24}). 
+\begin{assumption}[Non-degenerate]
+    \label{AS::non-degenerate}
+    We assume that the solution ($\bx^*,\bu^*)$ to the linear program \eqref{EQ::VOPTDYN-Tinf} is unique and satisfies that $x^*_i>0$ for all $i\in\sspace$ and that there exists a (unique) state $i^*\in\sspace$ such that $0 < u^*_{i^*} < x^*_{i^*}$.
+\end{assumption}
+%Note that the above state $i^*$ is necessary unique: if there were two such states, one can show that the solution of \eqref{EQ::VOPTDYN-Tinf} would not be unique.
+
+The second condition concerns the local stability of a map around the fixed point.
+\begin{assumption}
+    \label{AS::stable}
+    Assume~\ref{AS::non-degenerate} and let $P^*$ be the $|\sspace|\times|\sspace|$ matrix such that 
+    \begin{align*}
+        P^*_{ij} = \left\{\begin{array}{ll}
+            P^0_{ij} &\text{ if $i$ is such that $u^*_i<x^*_i$.}\\
+            P^1_{ij}-P^{1}_{i^*j}+P^{0}_{i^*j} &\text{ if $i$ is such that $u^*_i=x^*_i$.}
+        \end{array}\right.
+    \end{align*}
+    
+    We assume that the matrix $\Pmat{*}$ is stable, \emph{i.e.}, that the $l_2$ norm of all but one of the Eigenvalues of $\Pmat{*}$ are strictly smaller than 1.%all of the norm of all the eigenvalues of $P^*$ are strictly smaller than $1$, except for one eigenvalue that equals $1$.
+\end{assumption}
+Both these conditions are equivalent to the assumption of non-degeneracy and local stability defined in \cite{HXCW24}.
+
+The last condition that we impose is a technical assumption that simplifies the proofs. 
+\begin{assumption}[Unicity]% of the LP-update algorithm]
+    \label{AS::unique}
+    We assume that for all $\bx\in\Delta_{\sspace}$, the LP program \eqref{EQ::VOPTDYN} has a unique solution.
+\end{assumption}
+This assumption guarantees that the LP-update policy is uniquely defined. Note that the assumptions of unicity of the fixed point are often made implicitly in papers when authors talk about ``the'' optimal solution instead of ``an'' optimal solution. The assumptions of \emph{non-degeneracy} and \emph{unicity} are not restrictive since, degenerate solutions essentially occupy a zero-measure set: if a problem is degenerate (or has multiple solutions), then adding a small noise to the parameters will make this problem non-degenerate (or will guarantee the uniqueness of the solution). The situation is, however, different for the local stability assumption: if Assumption~\ref{AS::stable} does not hold for a given problem, then it will not hold for any problem that is close enough to this problem. Moreover, we believe that this assumption is necessary to derive a tighter bound in terms of the number of arms (\cite{HXCW24}).
+
+\begin{theorem}
+    \label{thm:expo_bound}
+    Assume \ref{AS::SA},  \ref{AS::non-degenerate}, \ref{AS::stable}, and \ref{AS::unique}; then there exist constants $C',C''>0$ (independent of $N$ and $\tau$) such that for all $\epsilon>0$, with $\tau(\epsilon)$ (set according to Theorem ~\ref{thm:asymptotic_optimal}) and $N$ such that $\alpha N$ is an integer, Algorithm \ref{algo::MPC} has the following guarantee of performance:
+    \begin{equation}
+        \Vlp{\tau(\epsilon)}{N} \ge \Vopt{\infty} - 2\epsilon - C'e^{-C'' N}.
+    \end{equation}
+\end{theorem}
+The first term of the bound above is identical to the one used in Theorem~\ref{thm:asymptotic_optimal}. What is more important is that the last term  decays exponentially with $N$. The results of Theorem \ref{thm:asymptotic_optimal} meet, order-wise the best known lower bounds \emph{without local stability conditions} from \cite{HXCW24} whereas Theorem \ref{thm:expo_bound} meets the best exponential bounds \emph{with stability conditions.} Our theorem shows that the LP-update policy also benefit from similar performance guarantees (while performing better for small values of $N$).  Previous results on LP-update policies were only able to match our bounds under the UGAP assumptions. \emph{Our relaxation of these assumptions can be regarded as one of the main contributions of our works.}
+
+The bounds that we obtain measure the performance gap $\Vlp{\tau(\epsilon)}{N}-\Vopt{\infty}$ which is the difference between the value of the LP-update policy for the system of size $N$ and the value of the relaxed LP. This performance gap is known to be of order at least $\Omega(1/\sqrt{N})$ for general degenerate problems and at least $\exp{-O{N}}$ for general non-degenerate problems.  As $\Vopt{\infty}\ge\Vopt{N}\ge$, this implies that the same bounds of $O(1/\sqrt{N})$ and $\exp(-\Omega(N))$ hold for the sub-optimality gap $\Vlp{\tau(\epsilon)}{N}-\Vopt{N}$.  In a recent paper, \cite{yan2024optimalgap} directly study this sub-optimality gap directly without comparing the benchmark to $\Vopt{\infty}$ for the finite horizon problem.
+

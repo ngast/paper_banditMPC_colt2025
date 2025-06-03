@@ -1,0 +1,67 @@
+\documentclass[final, 12pt]{colt2025} % For LaTeX2e
+\usepackage{times}
+
+
+\usepackage{graphicx}
+\graphicspath{{}{figs/}{../simulation/figs/}}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{enumitem}
+\input{Notation}
+
+\title{Model predictive control is almost optimal for restless bandits}
+
+
+\coltauthor{%
+ \Name{Nicolas Gast} \Email{nicolas.gast@inria.fr}\\
+ \addr Univ. Grenoble Alpes, Inria, CNRS, Grenoble INP\thanks{Institute of Engineering Univ. Grenoble Alpes}, LIG, 38000 Grenoble, France%
+ \AND
+ \Name{Dheeraj Narasimha} \Email{dheeraj.narasimha@inria.fr}\\
+ \addr Univ. Grenoble Alpes, Inria, CNRS, Grenoble INP, LIG, 38000 Grenoble, France%
+}
+
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to \LaTeX{} to determine where to break
+% the lines. Using \AND forces a linebreak at that point. So, if \LaTeX{}
+% puts 3 of 4 authors names on the first line, and the last on the second
+% line, try using \AND instead of \And before the third author name.
+
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+\newcommand\red[1]{#1}
+\newcommand\redtext[1]{#1}
+
+\begin{document}
+
+
+\maketitle
+
+\begin{abstract}
+    We consider the discrete time infinite horizon average reward restless markovian bandit (RMAB) problem. We propose a \emph{model predictive control} based non-stationary policy with a rolling computational horizon $\tau$. At each time-slot, this policy solves a $\tau$ horizon linear program whose first control value is kept as a control for the RMAB. Our solution requires minimal assumptions and quantifies the loss in optimality in terms of $\tau$ and the number of arms, $N$. We show that its sub-optimality gap is $O(1/\sqrt{N})$ in general, and $\exp(-\Omega(N))$ under a local-stability condition. Our proof is based on a framework from dynamic control known as \emph{dissipativity}. Our solution is easy to implement and performs very well in practice when compared to the state of the art. Further, both our solution and our proof methodology can easily be generalized to more general constrained MDP settings and should thus be of great interest to the burgeoning RMAB community.
+\end{abstract}
+
+\begin{keywords}%
+  Restless Bandits, LP-update policies, Constrained MDPs%
+\end{keywords}
+
+\input{01Introduction}
+\input{02-03SystemModel}
+\input{04MainBody}
+\input{05Proofs}
+\input{06Numerical}
+\section{Conclusion}
+\label{sec:conclusion}
+In this paper, we study the problem of constructing an efficient policy for restless multi-armed bandit for the average reward case. We show that under a quite general condition, a simple model-predictive control algorithm provides a solution that achieves both the best known upper bound ($O(1/\sqrt{N})$ or $\exp(-\Omega(N))$ for stable non-degenerate problems), and also works very efficiently in practice. Our paper provides the first analysis of this policy for the average reward criterion. By using a novel framework based on dissipativity we are able to make a subtle connection between the finite and the infinite-horizon problems and we are the first to use it in this context. We believe that this framework is what makes our analysis simple and easily generalizable to other settings. As an example, we discuss in 
+Appendix~\ref{apx:generalization}  
+the generalization to multi-action multi-constraint bandits. This connection also lends itself to a model-based learning setting. Furthermore, we believe that this framework could be used in the heterogeneous bandit problem. These problems are a matter for future work. 
+
+\bibliography{COLT_2025_conference}
+\newpage
+\appendix
+\input{08Appendix}
+
+
+
+\end{document}
