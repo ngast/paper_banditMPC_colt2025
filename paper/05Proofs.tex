@@ -54,12 +54,12 @@ that our problem is dissipative by setting the storage function $\lambda(x) := \
 By dissipativity, $L_\tau(\bx)$ is monotone increasing. Moreover, we have that $\Costmin{\tau}{\mB} \geq 0 = \Costmin{\tau}{\bx^*}$. Hence, the problem is \emph{operated optimally at the fixed point}, $(x^*, u^*)$. The optimal operation at a fixed point is a key observation, made by several works, \citep{Avrachenkov2024, GGY23b, yan2024, HXCW23}, we recover this result as a natural consequence of dissipativity.
 By Lemma~\ref{lem:C_vs_W},
 %One can establish (indeed we do this in the supplementary material)
-$\Costmin{\tau}{\mB}= \tau g^{\star} - \VoptInf{\tau}{\bx} + \lambda \cdot \bx$ because\footnote{In fact, the two control problems are equivalent: $\bu^*$ is optimal for \eqref{EQ::VOPTDYN} if and only if it is for \eqref{EQ::COSTMINPROB}. } of a telescopic sum of the terms $\lambda \cdot \bx(t)$.  Combining this with \eqref{EQ::Defbias} implies that $\lim_{\tau\to\infty}\Costmin{\tau}{\bx} = h^{\star}(\bx) + \lambda \cdot \bx $. \red{We will denote this limit by $\Costmin{\infty}{\bx}$.} %Now consider the quantity $\Costmin{\infty}{\bx}$,
+$\Costmin{\tau}{\mB}= \tau g^{\star} - \VoptInf{\tau}{\bx} + \lambda \cdot \bx$ because\footnote{In fact, the two control problems are equivalent: $\bu^*$ is optimal for \eqref{EQ::VOPTDYN} if and only if it is for \eqref{EQ::COSTMINPROB}. } of a telescopic sum of the terms $\lambda \cdot \bx(t)$.  Combining this with \eqref{EQ::Defbias} implies that $\lim_{\tau\to\infty}\Costmin{\tau}{\bx} = h^{\star}(\bx) + \lambda \cdot \bx $. We will denote this limit by $\Costmin{\infty}{\bx}$. %Now consider the quantity $\Costmin{\infty}{\bx}$,
 %\begin{align*}
  %  \infty > \Costmin{\infty}{\bx} =  \Costmin{0}{\bx} + \sum_{t = 1}^{\infty}\left(\Costmin{t}{\bx} %- \Costmin{t - 1}{\bx}\right)
 %\end{align*}
 As $L_\tau(\bx)$ is monotone, it follows that, for any $\epsilon > 0$, there exists a $\tau(\epsilon)$ such that %for $\Costmin{\tau(\epsilon)}{\bx} - \Costmin{\tau(\epsilon) - 1}{\bx} < \epsilon$ and
-\redtext{$|\Costmin{\infty}{\bx} - \Costmin{\tau(\epsilon)}{\bx}| < \epsilon$}. Note, the monotonicity of $L_\tau(\bx)$ is crucial to obtain this property, leading us to use dissipativity. Putting the components together, we can now prove the final steps.
+$|\Costmin{\infty}{\bx} - \Costmin{\tau(\epsilon)}{\bx}| < \epsilon$. Note, the monotonicity of $L_\tau(\bx)$ is crucial to obtain this property, leading us to use dissipativity. Putting the components together, we can now prove the final steps.
 %\subsubsection*{Proving the main statement of the theorem:}
 
 \paragraph{Proof of Theorem~\ref{thm:asymptotic_optimal}}
@@ -78,13 +78,8 @@ Let $(A):=\lim_{T\to\infty} \frac{1}{T}\sum_{t = 0}^{T-1} \E \left[l(\mX(t), \bu
 \begin{align*}
     &(A)  = \lim_{T\to\infty} \frac{1}{T}\sum_{t = 0}^{T-1} \E \left[\rotcost{l}{\mX(t)}{\bu(t)} - \lambda\cdot\mX(t) + \lambda\cdot\Phi(\mX(t), \bu(t)) \right].
 \end{align*}
-Now note, by the dynamic programming principle $\rotcost{l}{\bx}{\bu} = \Costmin{\tau}{\bx} - \Costmin{\tau - 1}{\Phi(\bx, \bu)}$. \red{Further, for any state $\bx$ and its corresponding control $\bu$ consider: $$\Costmin{\tau}{\bx} - \Costmin{\tau - 1}{\Phi(\bx, \bu)} = \Costmin{\tau}{\bx} - \Costmin{\infty}{\Phi(\bx, \bu)} + \Costmin{\infty}{\Phi(\bx, \bu)} - \Costmin{\tau - 1}{\Phi(\bx, \bu)}.$$
-By choosing $\tau = \tau(\epsilon)$ we have, $\max \{|\Costmin{\tau - 1}{\bx} - \Costmin{\infty}{\bx}|, |\Costmin{\tau}{\bx} - \Costmin{\infty}{\bx}|\} < \epsilon$.}
-%\red{THERE IS A BETTER WAY TO WRITE THiS DOWN, I AM MAKING THE $\tau$ UNNECESSARILY COMPLICATED. I"LL REWRITE IT IN THE SAME FORMAT BUT BETTER.}
-%\begin{align}
-    %\label{EQ:EQV3-4}
-    %\Costmin{\tau}{\bx} - \Costmin{\tau - 1}{\Phi(\bx, \bu)} \leq \Costmin{\tau}{\bx} - \Costmin{\tau}{\Phi(\bx, \bu)} + \epsilon    
-%\end{align}
+Now note, by the dynamic programming principle $\rotcost{l}{\bx}{\bu} = \Costmin{\tau}{\bx} - \Costmin{\tau - 1}{\Phi(\bx, \bu)}$. Further, for any state $\bx$ and its corresponding control $\bu$ consider: $$\Costmin{\tau}{\bx} - \Costmin{\tau - 1}{\Phi(\bx, \bu)} = \Costmin{\tau}{\bx} - \Costmin{\infty}{\Phi(\bx, \bu)} + \Costmin{\infty}{\Phi(\bx, \bu)} - \Costmin{\tau - 1}{\Phi(\bx, \bu)}.$$
+By choosing $\tau = \tau(\epsilon)$ we have, $\max \{|\Costmin{\tau - 1}{\bx} - \Costmin{\infty}{\bx}|, |\Costmin{\tau}{\bx} - \Costmin{\infty}{\bx}|\} < \epsilon$.
 Plugging these inequalities together, introducing a telescopic sum, and manipulating the order of variables slightly (shown in Appendix %C.4, supplementary material) the term $(A)$ is smaller than
 ~\ref{apx:proof_thm1_details}), the term $(A)$ is smaller than
 \begin{align}
@@ -99,36 +94,14 @@ By Lemma~1 of \cite{GGY23b}, we have $\|\E [\mX(t {+} 1)| \mX(t), \bU(t)] - \Phi
     \label{EQ:EQV4b}
     (A) \le 2\epsilon + (C_{L} + \|\lambda\|_\infty) \left(\frac{\sqrt{|S|}}{\sqrt{N}} + 2\frac{\alpha N - \lfloor\alpha N\rfloor}{N} \right),
 \end{align}
-where $C_{L}$ is a Lipschitz constant for the limiting map $\Costmin{\infty}{\cdot}$ and $\|\lambda\|_\infty$ is the infinity-norm of the Lagrange multiplier $\lambda$. \red{In Appendix 
-%C.3 (supplementary material)
+where $C_{L}$ is a Lipschitz constant for the limiting map $\Costmin{\infty}{\cdot}$ and $\|\lambda\|_\infty$ is the infinity-norm of the Lagrange multiplier $\lambda$. In Appendix 
 Appendix \ref{apx:MPC}[Lemma \ref{lem:C_vs_W}],
 we show that $C_{L}$ is bounded above by $k/\rho_k + \|\lambda\|_\infty$, further, in %the supplementary material
 Appendix \ref{APX:LAGBOUND}
-we show that $\|\lambda\|_\infty\le (k/\rho_k)(1+\alpha k/\rho_k)$.}  The theorem follows by substituting these values into \eqref{EQ:EQV4b} and adding a term $(\alpha N - \lfloor{\alpha N}\rfloor)/N$ coming from \eqref{EQ:EQV3}. See Appendix %C.5 (supplementary material)
+we show that $\|\lambda\|_\infty\le (k/\rho_k)(1+\alpha k/\rho_k)$.  The theorem follows by substituting these values into \eqref{EQ:EQV4b} and adding a term $(\alpha N - \lfloor{\alpha N}\rfloor)/N$ coming from \eqref{EQ:EQV3}. See Appendix %C.5 (supplementary material)
 ~\ref{apx:C5}.
 
-%Plugging this into \eqref{EQ:EQV4} shows that
-%\begin{align*}
-%    (A) \le \epsilon + (\frac{k}{\rho_k}+\frac{k}{\rho_k}(1+\alpha \frac{k}{\rho_k}))\left(\frac{\sqrt{|S|}}{\sqrt{N}} + \frac{\alpha N - \lfloor\alpha N\rfloor}{N} \right).
-%\end{align*}
 
-%(in $\mB$ for any $\tau$. Since, $\E [\mX(t + 1)| \mX(t), \bU(t)] = \Phi(\mX(t), \bU(t))$, Lemma~1 of \cite{GGY23b} implies: %\redtext{I am a bit ensure about the $l1$ vs $l2$ norm: the result of \cite{GGY23b} implies that the $l1$ norm is smaller than $\sqrt{S/N}$. If we look at the proof, we obtain a $\sqrt{1/N}$ for the $l2$-norm. Are you really using the $l2$ norm here?} \bluetext{You are right, the Lipschitz constant is given by $l1$ norm in this case for $h^{\star}$, that is the norm we need to use for all the proof values.}
-%\begin{align*}
-  % &\|\E[\mX(t + 1)|\mX(t), \bU(t)] - \Phi(\mX(t), \bu(t)) \|_1 \\
-  % &\leq \|\E[\mX(t + 1)|\mX(t), \bU(t)] - \Phi(\mX(t), \bU(t)) \|_1 + \|\Phi(\mX(t), \bu(t)) - \Phi(\mX(t), \bU(t)) \|_1\\
-  % &\leq \frac{\sqrt{|\sspace|}}{\sqrt{N}} + \frac{C_{\Phi}(\alpha N - \lfloor{\alpha N}\rfloor)}{N},
-%\end{align*}
-% $$\|\E[\mX(t + 1)|\mX(t), \bU(t)] - \Phi(\mX(t), \bu(t)) \|_1 \leq \frac{\sqrt{|\sspace|}}{\sqrt{N}} + \frac{C_{\Phi}(\alpha N - \lfloor{\alpha N}\rfloor)}{N},$$
-% \bluetext{ where $C_{\Phi}$ is the Lipschitz constant of the map $\Phi$. Since we consider the difference of the state from the expected state in the $l1$ norm, our bound for $\lambda$ will be in the infinity norm, $\|\lambda\|_{\infty}$. Passing to the limit $T\to\infty$ we have:
-% \begin{equation}
-%    \Vopt{\mB}{N} - \Vlpt{\mB}{\tau}{N} \leq  \epsilon + \left(\frac{k}{\syncconst_{k}} + \|\lambda\|_{\infty}\right)\left(\frac{\sqrt{|\mcl{S}|}}{\sqrt{N}} + \frac{C_{\Phi}(\alpha N - \lfloor{\alpha N}\rfloor)}{N}\right) + \frac{(\alpha N - \lfloor{\alpha N}\rfloor)}{N}
-% \end{equation}
-% Now note that $C_{\Phi}$ is bounded above by $2$ since the entries of any stochastic matrix are bounded above by $1$ and the transition kernel comprises of the difference of the transition kernel under action $1$ and $0$ in the worst case. Next, in Appendix \ref{SEC:LAGBOUND}, we show that under appropriate parametrization, the lagrange multiplier $\|\lambda\|_{\infty}$ is bounded above by $\frac{k}{\syncconst_k}\left( 1 + \frac{\alpha k}{\syncconst_{k} }\right)$. Substituting these values into our equation gives us:
-% \begin{equation}
-%    \Vopt{\mB}{N} - \Vlpt{\mB}{\tau}{N} \leq  \epsilon + \frac{k}{\syncconst_{k}}\left(2 + \frac{\alpha k}{\syncconst_{k}} \right)\left(\frac{\sqrt{|\mcl{S}|}}{\sqrt{N}} + \frac{2(\alpha N - \lfloor{\alpha N}\rfloor)}{N}\right) + \frac{(\alpha N - \lfloor{\alpha N}\rfloor)}{N}
-% \end{equation}
-% }
-%\end{proof}
 
 \subsection{Theorem~\ref{thm:expo_bound}}
 

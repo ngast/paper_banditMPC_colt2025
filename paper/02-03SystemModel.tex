@@ -61,25 +61,7 @@ To give some intuition on the relationship between \eqref{EQ::VOPTT} and \eqref{
 \end{equation}
 In \eqref{EQ::VOPTDYN-Tinf}, the variable $x_i$ corresponds to the time-averaged fraction of arms in state $i$; similarly the variable $u_i$ corresponds to the time-averaged fraction of arms in state $i$ that are pulled. The constraint \eqref{EQ::MF3-inf} imposes that \emph{on average}, no more than $\alpha N$ arms are pulled. This is in contrast with the condition imposed for problem \eqref{EQ::VOPTT} that enforces this condition at each time step. 
 
-%\redtext{\emph{Further, we will assume that each arm is unichain}.}
-%. Here $R(\bS, \bA)$ is the sum of rewards accumulated by our $N$ arms under joint state $\bS$ and action $\bA$. 
-%Let $\YN{t}{s}{a}$ denote the fraction of arms in state $s$, playing action $a$ at time $t$. Let $\Rvec{} = [\Rvec{0}, \Rvec{1}]$ be the concatenation of the reward vectors under action $0$ and $1$ respectively. We may then formulate the average reward accrued by the arm as follows:
 
-%Note, our problem does not attempt to relax the constraint by resorting to an average time constraint i.e, we do not replace \eqref{EQ:VOPT2} by,
-%\begin{equation*}
-%    \frac{1}{T}\sum_{s} \YN{t}{s}{1} = \alpha
-%\end{equation*}
-%Such a relaxation is often referred to as \redtext{Whittle's relaxation, [Consta, Borkar's papers].} \emph{Can we still come up with a tractable policy that solves this problem while maintaining the anytime constraint on the problem?}
-
-%\emph{Our work answers this question in the affirmative.}
-
-% \subsection{Problem Statement}
-% With the pieces in place we now state the problem as follows:
-% \begin{center}
-%     \emph{Using a minimal set of assumptions can we come up with a tractable solution to the problem \eqref{EQ::VOPTDYN}?
-%     Can one use this to construct a control for \ref{EQ::VOPTT} whose performance can be guaranteed?}
-% \end{center}
-% \textbf{Through this paper, we answer both these questions in the affirmative.}
 
 
 
@@ -105,7 +87,6 @@ In \eqref{EQ::VOPTDYN-Tinf}, the variable $x_i$ corresponds to the time-averaged
 % \E[\mM(\mX{}, \bU)|\mX{}, \bU] = 0, \hspace{0.3 in} \E[\|\mM(\mX{}, \bU)\|_1|\mX{},\bU]\leq \frac{|\sspace|}{\sqrt{N}}
 % \]
 
-%\redtext{!!TODO: introduce the multiplier!!}\bluetext{Do we need to do it here? It is only required for the proof.}\redtext{I believe we do if we want to consider the improved update (the second theorem)}
 
 To build the LP-update policy, we consider a \emph{controlled dynamical system}, also called the \emph{mean field model}, that is a finite-time equivalent of \eqref{EQ::VOPTDYN-Tinf}. For a given initial condition $\bx(0)$ and a time-horizon $\tau$, the states and actions of this dynamical system are constrained by the evolution equations 
 \begin{subequations}
@@ -162,41 +143,4 @@ The pseudo-code of the LP-update policy is presented in Algorithm \ref{algo::MPC
 \end{equation}
 We use a randomized rounding procedure similar to \cite{GGY23}, %check the supplementary material for details.
 see Appendix~\ref{apx:rounding}. 
-
-%see for example \citep{Avrachenkov2020WhittleIB,Avrachenkov2021}.
-%i.e,    For any feasible action $\bA^{(N)} := \{ a_1, a_2 \dots a_N\}$ for state $\bS^{(N)}$, the action $\bu := \bu(\bA^{(N)},\bS^{(N)})$ lies in $\mcl{U}(\mB(\bS^{(N)})$. Therefore, any stationary policy $\pi \in \pspace$ automatically lies in $\pspacedyn$. Hence, $\pspace \subset \pspacedyn$. 
-
-
-%This dynamical system constrains our choice of control $\{\y{s}{a}{t}\}$. Hence, given a state $\mB$ we use $\mcl{C}(\mB)$ to denote the set of valid controls for state $\mB$ and $\cspace{\mB}$ the space of controls for our infinite horizon problem. 
-
-%Next, we can define two separate but related long term rewards for this deterministic system, the average time and discounted reward problems. Let $\y{s}{a}{t}$ be our control, constrained by the dynamics \eqref{EQ:DYN} then define the following infinite horizon average reward problem with initial state distribution, $\mB(0)$:
-
-%\begin{align}\label{EQ:LPAVG}
-    %\Vdetavg{\mB(0)} \triangleq \max_{\textbf{y} \in \cspace{\mB}} \lim_{T \uparrow \infty}\frac{1}{T}\sum_{t = 0}^{T} \sum_{s,a} \y{s}{a}{t}\rew{s}{a} 
-%\end{align}
-
-%A corresponding infinite horizon discounted problem with discount factor $\beta < 1$ can similarly be written down as follows:
-
-%\begin{align}\label{EQ:LPDISC}
-    %\Vdetdisc{\mB(0)} \triangleq \max_{\textbf{y} \in \cspace{\mB}} \lim_{T \uparrow \infty}\sum_{t = 0}^{T} \beta^{t}\sum_{s,a} \y{s}{a}{t}\rew{s}{a} 
-%\end{align}
-
-%Where, $\textbf{y} := \{\y{s}{a}{t}\}_{(s,a,t)}$ is the infinite horizon control under the dynamic systems constraint \eqref{EQ:DYN1} - \eqref{EQ:DYN3}. 
-
-%A few concrete remarks on the mathematical structure of our problem are in order,
-
-%\begin{remark}\label{REM::1}
-    %Let $\Delss := \Dels \times \Dels$ denote the space of controls at each time $t \in \{0, 1, \dots\}$. The product topology on $\Pi_{t = 0}^{\infty}\Delss$ is the topology of point-wise convergence on the infinite horizon control problems \eqref{EQ:LPAVG} and \eqref{EQ:LPDISC}. Under the topology of point-wise convergence, the domain of $\textbf{y}$ is compact. Hence, the maximum in both $\Vdetavg{\mB(0)}, \Vdetdisc{\mB(0)}$ are well defined and there exists for each of the maximization problems at least one control, $\textbf{y}_{\text{avg}}, \textbf{y}_{\text{$\beta$}}$ respectively that maximizes the infinite horizon reward.
-
-    %\redtext{This is not quite right, we need to write this a little more carefully so that it takes care of the constraint set which is well defined given an initial condition and control policy.}
-    
-    %Further, note for any $\mB(0)$ in $\Dels$, 
-    %\[
-    %\Vdetavg{\mB(0)} = \Vopt{\infty}{N}
-    %\]
-    %This is independent of the initial condition. 
-%\end{remark}
-
-%\subsection*{An equivalent LP problem}
-%Before we proceed further, we pause to draw the readers attention to an equivalent finite horizon LP problem. This interpretation of the problem will be particularly useful when we state our algorithm in the next section. Let $\y{s}{a}{t}$ denote the fraction of arms in state $s$, with action $a$ at time $t$. We denote by $\ybt{t}$ the vector in $\Delss$ corresponding to this empirical distribution. It is straight-forward to check that the two systems are equivalent, $\ybt{t} := [\yb^{0}(t) \yb^{1}({t})]$ and $\yb^{0}({t}) = \mB(t) - \bu(t)$ and $\yb^{1}({t}) = \bu(t)$. Continuing further, let $\Pnext := [\Pmat{0} \Pmat{1}]$ and $\Rvec{} := [\Rvec{0} \Rvec{1}]$ be concatenations of the components under passive and active actions respectively. For a time horizon $T$, we can re-frame \eqref{EQ::VOPTDYN} in terms of a dynamic program as: 
 

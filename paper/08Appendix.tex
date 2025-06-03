@@ -223,7 +223,6 @@ which completes the proof.
 \label{apx:MPC}
 
 Recall that $\Costmin{\tau}{\mB} := \min \sum_{t = 0}^{\tau - 1} \rotcost{l}{\bx(t)}{\bu(t)}$ with $\bx(0) = \mB$.
-\red{
 \begin{lemma}
     \label{lem:C_vs_W}
     Given any initial distribution $\bx \in\Delta_{\sspace}$, the cost minimization problem $\Costmin{\tau}{\bx}$ and the reward maximization problem $\VoptInf{\tau}{\bx}$ are equivalent. Next, for all $\bx$, the limit $\lim_{t \to \infty}\Costmin{t}{\bx}$ exists and is bounded. Further, for any $\epsilon > 0$, there exists $\tau(\epsilon) < \infty$ such that: 
@@ -231,13 +230,7 @@ Recall that $\Costmin{\tau}{\mB} := \min \sum_{t = 0}^{\tau - 1} \rotcost{l}{\bx
     |\lim_{t \to \infty}\Costmin{t}{\bx} - \Costmin{\tau(\epsilon)}{\bx}| < \epsilon.
     \]
     Finally, the limit so defined is Lipschitz with Lipschitz constant $C_{L}$ bounded above by $\|\lambda\|_{\infty} + \frac{k}{\syncconst_k}$.  
-    %\begin{align*}
-        %\Costmin{\tau}{\bx} - \Costmin{\tau - 1}{\Phi(\bx, \bu)} < \epsilon.
-    %\end{align*}
-    %where $\bu \in \mcl{U}(\bx)$ is $\LPpol{t}{\bx}$. \redtext{What is more, the limit $\lim_{\tau \to \infty} \Costmin{\tau}{\bx}$ exists and is equal to $\lambda \cdot \bx + h^{\star}(\bx)$.}
 \end{lemma}
-}
-\red{
 \begin{proof}
 Recall that the objective function of the optimization problems $W_\tau$ and $L_\tau$ are:
 \begin{align*}
@@ -273,7 +266,7 @@ Hence, the Lipschitz constant under the $l1$ norm can explicitly be bounded as f
 \end{align*}
 Where we used Holder's inequality and Lemma \ref{LEM::EXGH} for the second inequality.  
 \end{proof}
-}
+
 \subsection{Proof of Theorem~\ref{thm:asymptotic_optimal}: Computation details for \eqref{EQ:EQV4}}
 \label{apx:proof_thm1_details}
 
@@ -301,7 +294,7 @@ which is \eqref{EQ:EQV4}
 \label{apx:C5}
 %In order to study \eqref{eq:EQV4_apx}, we first start by showing thi
 
-In \red{Lemma \ref{lem:C_vs_W}, we show that the function $\Costmin{\infty}{\cdot}$ has the following property in the $l1$ norm: $|\Costmin{\infty}{\bx}-\Costmin{\infty}{\bx'}|\le (\|\lambda\|_{\infty} + k/\rho_k)\|\bx-\bx'\|_1$}. Moreover, we show that under appropriate parametrization (see Appendix \ref{APX:LAGBOUND}), the Lagrange multiplier $\|\lambda\|_{\infty}$ is bounded above by $\frac{k}{\syncconst_k}\left( 1 + \frac{\alpha k}{\syncconst_{k} }\right)$. \red{This shows that
+In Lemma \ref{lem:C_vs_W}, we show that the function $\Costmin{\infty}{\cdot}$ has the following property in the $l1$ norm: $|\Costmin{\infty}{\bx}-\Costmin{\infty}{\bx'}|\le (\|\lambda\|_{\infty} + k/\rho_k)\|\bx-\bx'\|_1$. Moreover, we show that under appropriate parametrization (see Appendix \ref{APX:LAGBOUND}), the Lagrange multiplier $\|\lambda\|_{\infty}$ is bounded above by $\frac{k}{\syncconst_k}\left( 1 + \frac{\alpha k}{\syncconst_{k} }\right)$. This shows that
 \begin{align*}
     |\E\Big[\Costmin{\infty}{\mX(t &+ 1)} - \Costmin{\infty}{\Phi(\mX(t), \bu(t))} - \lambda\cdot\mX(t + 1)  + \lambda \cdot\Phi(\mX(t), \bu(t))\Big]| \\
     &\le (k/\rho_k + 2\|\lambda\|_\infty)\E\left[\|\mX(t + 1) - \Phi(\mX(t), \bu(t)\|_1\right]\\
@@ -328,7 +321,7 @@ By \eqref{EQ:EQV3}, $\Vopt{\mB}{N} - \Vlpt{\mB}{\tau}{N} \le (A) + \frac{\alpha 
    \Vopt{\mB}{N} - \Vlpt{\mB}{\tau}{N} \leq  2\epsilon + \frac{k}{\syncconst_{k}}\left(3 + 2\frac{\alpha k}{\syncconst_{k}} \right)\left(\frac{\sqrt{|\mcl{S}|}}{\sqrt{N}} + \frac{2(\alpha N - \lfloor{\alpha N}\rfloor)}{N}\right) + \frac{(\alpha N - \lfloor{\alpha N}\rfloor)}{N}
 \end{equation*}
 Theorem~\ref{thm:asymptotic_optimal} holds by grouping the terms that depend on $\frac{(\alpha N - \lfloor{\alpha N}\rfloor)}{N}$ and the terms that depend on $1/\sqrt{N}$.
-}
+
 \section{Proof of Theorem~\ref{thm:expo_bound}}
 \label{apx:PFcomp_expo}
 

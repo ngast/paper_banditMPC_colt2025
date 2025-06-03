@@ -1,3 +1,4 @@
+
 \section{Introduction}
 This work investigates the sequential decision making problem of Restless Multi-Armed Bandits (RMAB for short) over an infinite discrete time horizon. In this problem there are $N$ statistically identical arms. At each time step, the decision maker must choose for each arm if they would like to pull the arm or leave it as is. The decision maker has a constraint $\alpha N$ on the maximal number of arms that they may pull at each time instance. Each arm has a known state belonging to a common finite state space and upon choosing an action, produces a known state and action dependent reward. Next, the arms evolve to a new state independently according to a known state-action dependent transition kernel. These arms are only coupled through the budget constraint on the number of arms that may be pulled at each time instance. The state and reward are both revealed to the decision maker before the next decision needs to be made. The objective of the decision maker is to maximize the long-term time average reward.
 
@@ -15,12 +16,12 @@ Apart from the main result, we make several fresh observations about the nature 
     \item Returning to the dynamics around the fixed point, we can tighten the rate of convergence to $e^{-cN}$ under a local stability condition.
     
     \item Perhaps the most helpful portion of our results, for practical purposes: the MPC algorithm works well in practice and is easy to implement. It performs well both in terms of the number of arms $N$ as well as the computational time horizon $T$, beating state-of-the-art algorithms in our bench marks. 
-\redtext{
     \item Finally, from a control systems point of view, we return from trying to steer a dynamical system towards a fixed point to trying to maximize a value function. Policies can often be discontinuous in states while value functions are often smoother under mild assumptions.
-}
 \end{itemize}
 
-\paragraph{Road-map} The rest of the paper is organized as follows. We describe the system model and the corresponding linear relaxation in Section~\ref{sec:model}. We build the LP-update algorithm in Section~\ref{sec:algo} and present its performance guarantee in Section~\ref{sec:main-theory}.  We provide the main ingredients of the proof in Section~\ref{sec:proof} postponing the most technical lemmas to the appendix.  We illustrate the performance of the algorithm in Section~\ref{sec:numerical}. The appendix contains additional literature review \ref{apx:review}, details of the algorithm and their extension to multi-constraints MDPs \ref{apx:algo}, additional proofs \ref{apx:PFcomp}, \ref{apx:PFcomp_expo} and details about the numerical experiments \ref{apx:parameters}.
+\paragraph{Road-map} The rest of the paper is organized as follows. We describe the system model and the corresponding linear relaxation in Section~\ref{sec:model}. We build the LP-update algorithm in Section~\ref{sec:algo} and present its performance guarantee in Section~\ref{sec:main-theory}.  We provide the main ingredients of the proof in Section~\ref{sec:proof} postponing the most technical lemmas to the appendix.  We illustrate the performance of the algorithm in Section~\ref{sec:numerical}. The appendix contains additional literature review \ref{apx:review}, details of the algorithm and their extension to multi-constraints MDPs \ref{apx:algo}, additional proofs \ref{apx:PFcomp}, \ref{apx:PFcomp_expo} and details about the numerical experiments \ref{apx:parameters}. 
+
+\paragraph{Reproducibility} The code to reproduce this paper (including all simulations and figures) is available at \url{https://github.com/ngast/paper_banditMPC_colt2025}.
 
 
 
